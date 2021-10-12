@@ -1,11 +1,11 @@
 # Site settings
-name: "Seba"
-title: "seb1458" # site title
-description: "Blog on mapping and stuff # site description"
-logo: 'assets/img/avatar.jpeg'
-favicon: 'assets/img/avatar.jpeg'
-baseurl: ''
-mailchimp-list: ''
+name: Seba
+title: seb1458 # site title
+description: Blog on mapping and stuff # site description
+logo: assets/img/avatar.jpeg
+favicon: assets/img/avatar.jpeg
+baseurl: 
+mailchimp-list: 
 include: ["_pages"]
 permalink: /:title/
 

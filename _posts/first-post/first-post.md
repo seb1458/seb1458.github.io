@@ -1,5 +1,8 @@
 ---
-
+layout: post
+title:  "First blog post"
+author: Seba
+categories: [ Misc ]
 ---
 
 # My first post!

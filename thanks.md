@@ -11,3 +11,7 @@ Thanks to amazing people that i met, who help me out from follishness, connectin
 <hr>
 
 Hopefully the knowledge that I got from them can be useful, and become a charity for them, Aamiin.
+
+<hr>
+
+Thanks to Jekyll Klisé for the minimalistic theme, meet him at <a href="https://github.com/piharpi/jekyll-klise" target="_blank" rel="noopener">@github</a>.

@@ -19,7 +19,7 @@ I used *ggplot*, *ggpubr*, *ggmap*, *sf*, and *scatterpie*. Load the packages in
 
 ```r
 library(crimedata)
-library(tidyverse)
+library(tidyverse)  # Also loads ggplot2
 library(lubridate)
 library(ggpubr)
 library(ggmap)

@@ -17,7 +17,7 @@ and decided to write a quick tutorial since I encountered some difficulties in p
 As mentioned, I used data from the *crimedata* package, as well as the packages *tidyverse* and *lubridate* for data wrangling. For producing the maps and plots
 I used *ggplot*, *ggpubr*, *ggmap*, *sf*, and *scatterpie*. Load the packages individually or use the awesome package *pacman* to install and load packages simultaneously.
 
-```{r, include = TRUE, echo = FALSE}
+```r
 library(crimedata)
 library(tidyverse)
 library(lubridate)
@@ -26,7 +26,7 @@ library(ggmap)
 library(sf)
 library(scatterpie)
 
-# Or with pacman
+# Or with the function p_load() {pacman}
 pacman::p_load(crimedata, tidyverse, lubridate, ggpubr, ggmap, sf, scatterplot)
 ```
 
@@ -38,7 +38,7 @@ as the time between 8 AM and 10 PM. A little bit arbitrary and there is an uneve
 the final visualization changes if different splits or more classes (e.g., afternoon, evening, ...) are used! All the steps can easily be done using the
 pipe operator.
 
-```{r, include = TRUE, echo = FALSE}
+```r
 dt <- homicides15 %>%
     
     # Filter rows

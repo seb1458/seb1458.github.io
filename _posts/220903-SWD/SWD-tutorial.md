@@ -2,7 +2,7 @@
 layout: post
 title:  "Known to novel"
 author: Seba
-categories: [ Misc ]
+categories: [ R ], [ Visualization ], [ Maps ]
 ---
 
 # BLABLA

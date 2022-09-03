@@ -8,4 +8,4 @@ comments: false
 
 I am PhD student interested in ecology, spatial ecology and environmental modelling. I also enjoy everything data: web scraping, wrangling, visualization, analysis. 
 
-If you have a question: {{ seba-s@posteo.net }} or github.com/{{ seb1458 }}
+If you have a question: seba-s@posteo.net or github.com/seb1458

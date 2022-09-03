@@ -5,7 +5,7 @@ author: Seba
 categories: [ R, Visualization, Maps ]
 ---
 
-# BLABLA
+# Known to novel
 
 A new month means a new [challenge](https://community.storytellingwithdata.com/challenges/sep-2022-known-to-novel) over at the blog of *Storytelling with Data*.
 The task was to create a data visualization by going from known to unknown graphs. But in addition explain the process in a way an audience could follow along.

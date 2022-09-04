@@ -136,7 +136,7 @@ I used the same colors as for the first bar plot and changed the titles accordin
 
 <figure>
 <img src="/220903-SWD/arr_plot.svg">
-<figcaption>Fig 2. More homicides are commited in the *center*. But there is a difference between day and night along the longitude and latitude.</figcaption>
+<figcaption>Fig 2. More homicides are commited in the center. But there is a difference between day and night along the longitude and latitude.</figcaption>
 </figure>
 
 By now we produced a bunch of nice plots and compared two to three variables (number of homicides versus daytime and spatial coordinates). Visualizing spatial patterns with bar plots is pretty abstract, maybe there is a better way.

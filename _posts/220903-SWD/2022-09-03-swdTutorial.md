@@ -89,7 +89,7 @@ dt %>%
 We can use `labs()` to reference important plot elements, such as title, subtitle, captions, axis labels, etc. ... For the final plot I added some color, a title and referenced the data source given in the *crimedata* package (Fig. 1). 
 
 <figure>
-<img src="images/220903-SWD/simple_plot.svg">
+<img src="https://seb1458.github.io/images/220903-SWD/simple_plot.svg">
 <figcaption>Fig 1. Homicides in New York City in the year 2015. More homicides are commited during daytime.</figcaption>
 </figure>
 
@@ -135,7 +135,7 @@ ggarrange(lon_p, lat_p, common.legend = TRUE, legend = "bottom")
 I used the same colors as for the first bar plot and changed the titles accordingly (Fig. 2). For a better comparison I also changed the scale of the y-axis.
 
 <figure>
-<img src="images/220903-SWD/arr_plot.svg">
+<img src="https://seb1458.github.io/images/220903-SWD/arr_plot.svg">
 <figcaption>Fig 2. More homicides are commited in the center. But there is a difference between day and night along the longitude and latitude.</figcaption>
 </figure>
 

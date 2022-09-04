@@ -86,7 +86,7 @@ dt %>%
         theme(legend.position = "none")
 ```
 
-The `labs()` function works great, because it allows to reference important plot elements, such as title, subtitle, captions, axis labels, etc. ... For the final plot I added some color, a title and referenced the data source given in the *crimedata* package (Fig. 1). 
+We can use `labs()` to reference important plot elements, such as title, subtitle, captions, axis labels, etc. ... For the final plot I added some color, a title and referenced the data source given in the *crimedata* package (Fig. 1). 
 
 <figure>
 <img src="_posts/220903-SWD/simple_plot.svg">

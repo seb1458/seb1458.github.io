@@ -89,7 +89,7 @@ dt %>%
 We can use `labs()` to reference important plot elements, such as title, subtitle, captions, axis labels, etc. ... For the final plot I added some color, a title and referenced the data source given in the *crimedata* package (Fig. 1). 
 
 <figure>
-<img src="https://seb1458.github.io/assets/img/avatar.jpg" style="display: block; margin: auto;" />
+<img src="https://seb1458.github.io/assets/img/220903-SWD-novel/simple_plot.svg" style="display: block; margin: auto;" />
 <figcaption>Fig 1. Homicides in New York City in the year 2015. More homicides are commited during daytime.</figcaption>
 </figure>
 

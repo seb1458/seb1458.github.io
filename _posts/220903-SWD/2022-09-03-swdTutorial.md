@@ -135,7 +135,7 @@ ggarrange(lon_p, lat_p, common.legend = TRUE, legend = "bottom")
 I used the same colors as for the first bar plot and changed the titles accordingly (Fig. 2). For a better comparison I also changed the scale of the y-axis.
 
 <figure>
-<img src="https://seb1458.github.io/images/220903-SWD/arr_plot.svg">
+<img src="https://seb1458.github.io/assets/img/220903-SWD-novel/arr_p.svg" style="display: block; margin: auto;" />
 <figcaption>Fig 2. More homicides are commited in the center. But there is a difference between day and night along the longitude and latitude.</figcaption>
 </figure>
 
@@ -166,6 +166,6 @@ dt %>%
 There is no big difference to the previous code. We group by coordinate pairs and count the number of homicides. Afterwards, we plot the homicides at each coordinate pair and control the size of the points by the number of homicides. 
 
 <figure>
-<img src="/220903-SWD/bubble_plot.svg">
+<img src="https://seb1458.github.io/assets/img/220903-SWD-novel/bubble_plot.svg" style="display: block; margin: auto;" />
 <figcaption>Fig 3. Spatial distribution of homicides. Trends from previous plots can be found here (e.g., high number of homicides around latitude 40.7)  </figcaption>
 </figure>

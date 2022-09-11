@@ -135,7 +135,7 @@ ggarrange(lon_p, lat_p, common.legend = TRUE, legend = "bottom")
 I used the same colors as for the first bar plot and changed the titles accordingly (Fig. 2). For a better comparison I also changed the scale of the y-axis.
 
 <figure>
-<img src="https://seb1458.github.io/assets/img/220903-SWD-novel/arr_p.jpg" style="display: block; margin: auto;" />
+<img src="https://seb1458.github.io/assets/img/220903-SWD-novel/arr_p.png" style="display: block; margin: auto;" />
 <figcaption>Fig 2. More homicides are commited in the center. But there is a difference between day and night along the longitude and latitude.</figcaption>
 </figure>
 

@@ -93,6 +93,8 @@ We can use `labs()` to reference important plot elements, such as title, subtitl
 <figcaption>Fig 1. Homicides in New York City in the year 2015. More homicides are commited during daytime.</figcaption>
 </figure>
 
+<img src="https://seb1458.github.io/assets/img/avatar.jpg" style="display: block; margin: auto;" />
+
 ![useful image](simple_plot.png)
 
 This is already quiet nice, but is there also a spatial pattern? Spatial coordinates are given in the dataset and we can look at the same distribution of homicides but add the additional information of distribution for longitude and latitude. Again we group the data by daytime and longitude or latitude respectively. Note that we use rounded coordinates to roughly group the data. I used the *ggpubr* package to arrange the plots next to each other.

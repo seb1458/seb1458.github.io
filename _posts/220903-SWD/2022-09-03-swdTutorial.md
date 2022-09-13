@@ -253,6 +253,6 @@ ggmap(nyc_map) +
 The result is a cool looking map with pie charts indicating during which time of the day homicides happened in New York City and the size indicates how many homicides were happening in the respective area. I hope you liked this little tutorial and if you have any critic, recommendations or questions: please let me know!
 
 <figure>
-<img src="https://seb1458.github.io/assets/img/220903-SWD-novel/map_plot.jpg" style="display: block; margin: auto;" />
+<img src="https://seb1458.github.io/assets/img/220903-SWD-novel/map_plot_mod.jpg" style="display: block; margin: auto;" />
 <figcaption>Fig 4. Distribution of homicides in New York City with spatial pie charts indicating the number of homicides in a given area and how this cases are distributed between day and night.</figcaption>
 </figure>

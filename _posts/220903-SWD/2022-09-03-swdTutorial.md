@@ -172,25 +172,21 @@ There is no big difference to the previous code. We group by coordinate pairs an
 
 # Maps and pie charts
 
-The last attempt to plot the data is basically a map without any *spatial context*. We can add a background map and tweak titles, labs, and add pie charts to see where and during what time of day homicides are happening. But we need to prepare the data. First, I decided to round the coordinates in order to summarise all cases in one area. Second, we need to compute the ratio of daytime and nighttime cases versus total cases for one area. This will be the base for our pie charts. Afterwards, we can also use the number of cases to control the size of the pie charts. This sounds like a lot, but we actually need only a few lines of code.
+The last attempt to plot the data is basically a map without any *spatial context*. We can add a background map and tweak titles, labs, and add pie charts to see where and during what time of day homicides are happening. Afain we need to prepare the data before plotting. We will use the rounded coordinates to visualize the number of cases per are. Therefore, we need to compute the ratio of daytime and nighttime cases versus total cases for one area. This will be the base for our pie charts. Afterwards, we can also use the number of cases to control the size of the pie charts. This sounds like a lot, but we actually need only a few lines of code.
 
 ```r
 ## Prepare data for plotting of a map with pie charts
 pie_prep <- dt %>%
 
 dt %>%
-    
-    # Round coordinates
-    mutate(longitude = round(longitude, 1),
-           latitude = round(latitude, 1)) %>%
 
     # Add total number of homicides per rounded coordinate pair: add proxy for counting, group by coordinate pairs, and calculate total number of cases
     mutate(count = 1) %>%
-    group_by(longitude, latitude) %>%
+    group_by(lon_round, lat_round) %>%
     mutate(count_total = sum(count)) %>%
     
     # Add total number of homices per coordinate pair and daytime: group by coordinate pairs, and calculate total number of cases per daytime
-    group_by(longitude, latitude, daytime) %>%
+    group_by(lon_round, lat_round, daytime) %>%
     mutate(count_daytime = sum(count)) %>%
     
     # Compute ratios for day and night
@@ -209,7 +205,7 @@ dt %>%
     # Rename column
     mutate(`Total cases` = count_total)
 ```
-You might be wondering about the addition of the radius column. The **scatterpie** package is used to produce pie charts and in order to scale the pie chart by number of cases we can not use the raw value of the total cases as minimum and maximum are to far apart. We need to transform this number in a way to down scale large values more drastically than small values. I went for a square root transformation, but double-squareroot- or log-transformation also works. The new value is the radius of the pie chart, and it will be converted to the original value by reversing the calculation (see below). 
+You might be wondering about the addition of the radius column. The **scatterpie** package is used to produce pie charts and if we would scale the size by the raw total number of cases the discrepancy between sizes would be to high. We need to transform this number in a way to down scale large values more drastically than small values. I went for a square root transformation, but double-squareroot- or log-transformation also works. The new value is the radius of the pie chart, and it will be converted to the original value by reversing the calculation (see below). This whole process is fiddly, but I did not find a better approach then trial and error. Let me know if I am overlooking something crucial!
 
 The data looks nice and is ready for plotting. But one thing is missing: we need a map in order to provide context for our data and analysis. We can use `get_map()` from **ggmap** to access open source tile sets. We can use names or a bounding box, which is a set of coordinates defining a rectangle and its position. Here, I used the latter, as it ensures the inclusion of all points. As we are going to build a map with **ggplot2** (or *ggmap* respectively), we also nee to convert our prepared data to a spatial object. Here we use the package **sf*** to yield a simple feature object, which we can plot on our map. 
 
@@ -222,7 +218,7 @@ nyc_map <- get_map(c(-74.25, 40.45, -73.65, 40.95), maptype = "toner-background"
 crime_sf <- st_as_sf(pie_prep, coords = c("longitude", "latitude"), crs = 4326)
 ```
 
-Now we really have everything to finally produce a nice looking map. First, we print the map and position the pie charts according to the rounded coordinates. The `geom_scatterpie()` functions works similar to all the other *geom_x* functions from **ggplot2**. Adding a legend for the pie chart is a little bit fiddly. As mentioned before, we need to back transform the radius using a custom function and the legend is put on to the map by finding a position manually (via x- and y-coordinates). The rest of the code is probably old news by now. 
+Now we really have everything to finally produce a nice looking map. First, we print the map and position the pie charts according to the rounded coordinates. The `geom_scatterpie()` functions works similar to all the other *geom_x* functions from **ggplot2**. Adding a legend for the pie chart is again a little bit fiddly. As mentioned before, we need to back transform the radius using a custom function and the legend is put on to the map by finding a position manually (via x- and y-coordinates). The rest of the code is probably old news by now. 
 
 ```r
 ggmap(nyc_map) +

@@ -14,8 +14,8 @@ and decided to write a quick tutorial since I encountered some difficulties in p
 
 # Setup
 
-As mentioned, I used data from the *crimedata* package, as well as the packages *tidyverse* and *lubridate* for data wrangling. For producing the maps and plots
-I used *ggplot*, *ggpubr*, *ggmap*, *sf*, and *scatterpie*. Load the packages individually or use the awesome package *pacman* to install and load packages simultaneously.
+As mentioned, I used data from the **crimedata** package, as well as the packages **tidyverse** and **lubridate** for data wrangling. For producing the maps and plots
+I used **ggplot**, **ggpubr**, **ggmap**, **sf**, and **scatterpie**. Load the packages individually or use the awesome package **pacman** to install and load packages simultaneously.
 
 ```r
 library(crimedata)
@@ -32,7 +32,7 @@ pacman::p_load(crimedata, tidyverse, lubridate, ggpubr, ggmap, sf, scatterplot)
 
 # Data preparation
 
-After loading all packages we can begin by preparing our data. I used the **homicides14** dataset, which contains homicide records from the year 2015 of nine
+After loading all packages we can begin by preparing our data. I used the *homicides14* dataset, which contains homicide records from the year 2015 of nine
 large US cities. I decided to use the data from New York City and to investigate the distribution of homicides between day and night. I defined daytime
 as the time between 8 AM and 10 PM. A little bit arbitrary and there is an uneven split between day (= 14 h) and night (= 8 h), but check for yourself how
 the final visualization changes if different splits or more classes (e.g., afternoon, evening, ...) are used! All the steps can easily be done using the
@@ -64,8 +64,8 @@ head(dt)
 
 # From simple ...
 
-There are several ways to visualize this data by looking at a few variables such as distribution of homicides between day and night or spatial patterns. Let's start with the former and check if there is a difference between day and night. We use *ggplot* to produce a simple bar chart. First we need to count 
-the number of homicides for each daytime. Again we can use pipes in combination with *ggplot* to produce a nice looking plot.
+There are several ways to visualize this data by looking at a few variables such as distribution of homicides between day and night or spatial patterns. Let's start with the former and check if there is a difference between day and night. We use **ggplot** to produce a simple bar chart. First we need to count 
+the number of homicides for each daytime. Again we can use pipes in combination with **ggplot** to produce a nice looking plot.
 
 ```r
 dt %>%
@@ -86,14 +86,14 @@ dt %>%
         theme(legend.position = "none")
 ```
 
-We can use `labs()` to reference important plot elements, such as title, subtitle, captions, axis labels, etc. ... For the final plot I added some color, a title and referenced the data source given in the *crimedata* package (Fig. 1). 
+We can use `labs()` to reference important plot elements, such as title, subtitle, captions, axis labels, etc. ... For the final plot I added some color, a title and referenced the data source given in the **crimedata** package (Fig. 1). 
 
 <figure>
 <img src="https://seb1458.github.io/assets/img/220903-SWD-novel/simple_plot.png" style="display: block; margin: auto;" />
 <figcaption>Fig 1. Homicides in New York City in the year 2015. More homicides are commited during daytime.</figcaption>
 </figure>
 
-This is already quiet nice, but is there also a spatial pattern? Spatial coordinates are given in the dataset and we can look at the same distribution of homicides but add the additional information of distribution for longitude and latitude. Again we group the data by daytime and longitude or latitude respectively. Note that we use rounded coordinates to roughly group the data. I used the *ggpubr* package to arrange the plots next to each other.
+This is already quiet nice, but is there also a spatial pattern? Spatial coordinates are given in the dataset and we can look at the same distribution of homicides but add the additional information of distribution for longitude and latitude. Again we group the data by daytime and longitude or latitude respectively. Note that we use rounded coordinates to roughly group the data. I used the **ggpubr** package to arrange the plots next to each other.
 
 ```r
 # Plot distribution of homicdes along the longitudinal coordinates
@@ -168,4 +168,91 @@ There is no big difference to the previous code. We group by coordinate pairs an
 <figure>
 <img src="https://seb1458.github.io/assets/img/220903-SWD-novel/bubble_plot.png" style="display: block; margin: auto;" />
 <figcaption>Fig 3. Spatial distribution of homicides. Trends from previous plots can be found here (e.g., high number of homicides around latitude 40.7)  </figcaption>
+</figure>
+
+# Maps and pie charts
+
+The last attempt to plot the data is basically a map without any *spatial context*. We can add a background map and tweak titles, labs, and add pie charts to see where and during what time of day homicides are happening. But we need to prepare the data. First, I decided to round the coordinates in order to summarise all cases in one area. Second, we need to compute the ratio of daytime cases versus total cases for one area. This will be the base for ourpie charts. Afterwards, we can also use the number of cases to control the size of the pie charts. This sounds like a lot, but we actually need only a few lines of code.
+
+```r
+## Prepare data for plotting of a map with pie charts
+pie_prep <- dt %>%
+
+dt %>%
+    
+    # Round coordinates
+    mutate(longitude = round(longitude, 1),
+           latitude = round(latitude, 1)) %>%
+
+    # Add total number of homicides per rounded coordinate pair: add proxy for counting, group by coordinate pairs, and calculate total number of cases
+    mutate(count = 1) %>%
+    group_by(longitude, latitude) %>%
+    mutate(count_total = sum(count)) %>%
+    
+    # Add total number of homices per coordinate pair and daytime: group by coordinate pairs, and calculate total number of cases per daytime
+    group_by(longitude, latitude, daytime) %>%
+    mutate(count_daytime = sum(count)) %>%
+    
+    # Compute ratios for day and night
+    mutate(ratio = count_daytime / count_total) %>%
+    
+    # Select relevant columns
+    select(longitude, latitude, daytime, ratio, count_total) %>%
+    unique() %>%
+    
+    # From long to wide
+    pivot_wider(names_from = daytime, values_from = ratio) %>%
+    
+    # Add radius for plotting
+    mutate(radius = sqrt(count_total) / 250) %>%
+    
+    # Rename column
+    mutate(`Total cases` = count_total)
+```
+You might be wondering about the addition of the radius column. The **scatterpie** package is used to produce pie charts, but they are not really pie charts.  In order to scale the pie chart by number of cases we can not use the raw value of the total cases as minimum and maximum are to far apart. We need to transform this number in a way to down scale large values more drastically than small values. I went for a square root transformation, but double-squareroot- or log-transformation also works. The new value is the radius of the pie chart, and it will be linked to the real value by back transforming (see below). 
+
+The data looks nice and is ready for plotting. But one thing is missing: we need a map in order to provide context for our data and analysis. We can use `get_map()` from **ggmap** to access open source tile sets. We can use names directly or a bounding box, which is a set of coordinates defining a rectangle and its position. As we are going to build a map with **ggplot2** (or *ggmap* respectively), we also nee to convert our prepared data to a spatial object. Here we use the package **sf*** to yield a simple feature object, which we can plot on our map. 
+
+```r
+## Preparation of spatial information
+# Get map tiles from OSM
+nyc_map <- get_map(c(-74.25, 40.45, -73.65, 40.95), maptype = "toner-background")
+
+# Convert prepared data to spatial feature
+crime_sf <- st_as_sf(pie_prep, coords = c("longitude", "latitude"), crs = 4326)
+```
+
+Now we really have everything to finally produce a nice looking map. First, we print the map and position the pie charts according to the rounded coordinates. The `geom_scatterpie()` functions works similar to all the other *geom_x* functions from **ggplot2**. Adding a legend for the pie chart is a little bit fiddly. As mentioned before, we need to back transform the radius using a custom function and the legend is put on to the map by finding a position manually (via x- and y-coordinates). The rest of the code is probably old news by now. 
+
+```r
+ggmap(nyc_map) +
+    
+    # Add Scatterpies with individual color
+    geom_scatterpie(aes(x = longitude, y = latitude, r = radius),
+                    data = prep, cols = c("Night", "Day"), color = NA,
+                    alpha = 0.8) +
+    coord_fixed() +
+    scale_fill_manual(values = c("darkblue", "darkgoldenrod1")) +
+    geom_scatterpie_legend(prep$radius, n = 4, labeller = function(x) (x*250)^2, x = -73.775, y = 40.5) +
+    
+    # Labels, legend, ...
+    labs(title = "Homicides in New York City 2015\n",
+         subtitle = " Pie chart radius indicates number of homicides",
+         x = "",
+         y = "",
+         fill = "Daytime",
+         caption = "Source: Crime Open Database") +
+    
+    # Theme
+    theme_bw() +
+    theme(legend.position = "top",
+          legend.justification = "left",
+          legend.direction = "horizontal")
+```
+
+The result is a cool looking map with pie charts indicating during which time of the day homicides happened in New York City and the size indicates how many homicides were happening in the respective area. I hope you liked this little tutorial and if you have any critic, recommendations or questions: please let me know!
+
+<figure>
+<img src="https://seb1458.github.io/assets/img/220903-SWD-novel/map_plot.png" style="display: block; margin: auto;" />
+<figcaption>Fig 4. Distribution of homicides in New York City with spatial pie charts indicating the number of homicides in a given area and how this cases are distributed between day and night.</figcaption>
 </figure>

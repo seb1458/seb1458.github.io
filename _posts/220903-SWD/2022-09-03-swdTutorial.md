@@ -178,8 +178,6 @@ The last attempt to plot the data is basically a map without any *spatial contex
 ## Prepare data for plotting of a map with pie charts
 pie_prep <- dt %>%
 
-dt %>%
-
     # Add total number of homicides per rounded coordinate pair: add proxy for counting, group by coordinate pairs, and calculate total number of cases
     mutate(count = 1) %>%
     group_by(lon_round, lat_round) %>%

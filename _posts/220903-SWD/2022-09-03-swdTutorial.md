@@ -172,7 +172,7 @@ There is no big difference to the previous code. We group by coordinate pairs an
 
 # Maps and pie charts
 
-The last attempt to plot the data is basically a map without any *spatial context*. We can add a background map and tweak titles, labs, and add pie charts to see where and during what time of day homicides are happening. But we need to prepare the data. First, I decided to round the coordinates in order to summarise all cases in one area. Second, we need to compute the ratio of daytime cases versus total cases for one area. This will be the base for ourpie charts. Afterwards, we can also use the number of cases to control the size of the pie charts. This sounds like a lot, but we actually need only a few lines of code.
+The last attempt to plot the data is basically a map without any *spatial context*. We can add a background map and tweak titles, labs, and add pie charts to see where and during what time of day homicides are happening. But we need to prepare the data. First, I decided to round the coordinates in order to summarise all cases in one area. Second, we need to compute the ratio of daytime and nighttime cases versus total cases for one area. This will be the base for our pie charts. Afterwards, we can also use the number of cases to control the size of the pie charts. This sounds like a lot, but we actually need only a few lines of code.
 
 ```r
 ## Prepare data for plotting of a map with pie charts
@@ -209,9 +209,9 @@ dt %>%
     # Rename column
     mutate(`Total cases` = count_total)
 ```
-You might be wondering about the addition of the radius column. The **scatterpie** package is used to produce pie charts, but they are not really pie charts.  In order to scale the pie chart by number of cases we can not use the raw value of the total cases as minimum and maximum are to far apart. We need to transform this number in a way to down scale large values more drastically than small values. I went for a square root transformation, but double-squareroot- or log-transformation also works. The new value is the radius of the pie chart, and it will be linked to the real value by back transforming (see below). 
+You might be wondering about the addition of the radius column. The **scatterpie** package is used to produce pie charts and in order to scale the pie chart by number of cases we can not use the raw value of the total cases as minimum and maximum are to far apart. We need to transform this number in a way to down scale large values more drastically than small values. I went for a square root transformation, but double-squareroot- or log-transformation also works. The new value is the radius of the pie chart, and it will be converted to the original value by reversing the calculation (see below). 
 
-The data looks nice and is ready for plotting. But one thing is missing: we need a map in order to provide context for our data and analysis. We can use `get_map()` from **ggmap** to access open source tile sets. We can use names directly or a bounding box, which is a set of coordinates defining a rectangle and its position. As we are going to build a map with **ggplot2** (or *ggmap* respectively), we also nee to convert our prepared data to a spatial object. Here we use the package **sf*** to yield a simple feature object, which we can plot on our map. 
+The data looks nice and is ready for plotting. But one thing is missing: we need a map in order to provide context for our data and analysis. We can use `get_map()` from **ggmap** to access open source tile sets. We can use names or a bounding box, which is a set of coordinates defining a rectangle and its position. Here, I used the latter, as it ensures the inclusion of all points. As we are going to build a map with **ggplot2** (or *ggmap* respectively), we also nee to convert our prepared data to a spatial object. Here we use the package **sf*** to yield a simple feature object, which we can plot on our map. 
 
 ```r
 ## Preparation of spatial information

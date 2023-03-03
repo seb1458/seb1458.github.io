@@ -9,13 +9,13 @@ categories: [ R, Visualization, Maps ]
 
 A new month means a new [challenge](https://community.storytellingwithdata.com/challenges/sep-2022-known-to-novel) over at the blog of *Storytelling with Data*.
 The task was to create a data visualization by going from known to unknown graphs. But in addition explain the process in a way an audience could follow along.
-Some interesting data comes with the *crimedata* pacakge and I though about different possibilities to visualize the data. I did enjoy the this process a lot
+Some interesting data comes with the *crimedata* package and I thought about different possibilities to visualize the data. I did enjoy the this process a lot
 and decided to write a quick tutorial since I encountered some difficulties in producing the final plots. 
 
 # Setup
 
 As mentioned, I used data from the **crimedata** package, as well as the packages **tidyverse** and **lubridate** for data wrangling. For producing the maps and plots
-I used **ggplot**, **ggpubr**, **ggmap**, **sf**, and **scatterpie**. Load the packages individually or use the awesome package **pacman** to install and load packages simultaneously.
+I used **ggplot2**, **ggpubr**, **ggmap**, **sf**, and **scatterpie**. Load the packages individually or use the awesome package **pacman** to install and load packages simultaneously.
 
 ```r
 library(crimedata)
@@ -32,8 +32,7 @@ pacman::p_load(crimedata, tidyverse, lubridate, ggpubr, ggmap, sf, scatterplot)
 
 # Data preparation
 
-After loading all packages we can begin by preparing our data. I used the *homicides14* dataset, which contains homicide records from the year 2015 of nine
-large US cities. I decided to use the data from New York City and to investigate the distribution of homicides between day and night. I defined daytime
+I used the *homicides14* dataset, which contains homicide records from the year 2015 of nine large US cities. I decided to use the data from New York City and to investigate the distribution of homicides between day and night. I defined daytime
 as the time between 8 AM and 10 PM. A little bit arbitrary and there is an uneven split between day (= 14 h) and night (= 8 h), but check for yourself how
 the final visualization changes if different splits or more classes (e.g., afternoon, evening, ...) are used! All the steps can easily be done using the
 pipe operator.
@@ -64,8 +63,8 @@ head(dt)
 
 # From simple ...
 
-There are several ways to visualize this data by looking at a few variables such as distribution of homicides between day and night or spatial patterns. Let's start with the former and check if there is a difference between day and night. We use **ggplot** to produce a simple bar chart. First we need to count 
-the number of homicides for each daytime. Again we can use pipes in combination with **ggplot** to produce a nice looking plot.
+There are several ways to visualize this data by looking at a few variables such as distribution of homicides between day and night or spatial patterns. Let's start with the former and check if there is a difference between day and night. We use **ggplot2** to produce a simple bar chart. First we need to count 
+the number of homicides for each daytime. Again we can use pipes in combination with **ggplot2** to produce a nice looking plot.
 
 ```r
 dt %>%
@@ -143,8 +142,8 @@ By now we produced a bunch of nice plots and compared two to three variables (nu
 
 # ... to complex
 
-There are several ways I thought about how to visualize this in a more intuitive manner. First, I want to use the coordinate pairs like they are used on a map. This way we can easily see where a homicide was happening. It also allows us to see if there are any dangerous areas where a lot of homicides are
-happening. Second, we can control the size of the points we are plotting to see how many homicides were happening at the exact same location. Third, we can roudn coordinate pairs to look at the bigger picture and check for differences between daytime and the number of homicides. This is a lot of information, so lets start by plotting the homicides by their coordinates pairs, and control the size of the points to see if there are areas where more homicides are happening. Note, that we use the exact coordinate pairs.
+There are several options to include in visualizing the data in a spatial manner. First, I want to use the coordinate pairs like they are used on a map. This way we can easily see where a homicide was happening. It also allows us to see if there are any dangerous areas where a lot of homicides are
+happening. Second, we can control the size of the points we are plotting to see how many homicides were happening at the exact same location. Third, we can round coordinate pairs to look at the bigger picture and check for differences between daytime and the number of homicides. This is a lot of information, so lets start by plotting the homicides by their coordinates pairs, and control the size of the points to see if there are areas where more homicides are happening. Note, that we use the exact coordinate pairs.
 
 ```r
 # Prepare data in a similar manner as before
@@ -172,7 +171,7 @@ There is no big difference to the previous code. We group by coordinate pairs an
 
 # Maps and pie charts
 
-The last attempt to plot the data is basically a map without any *spatial context*. We can add a background map and tweak titles, labs, and add pie charts to see where and during what time of day homicides are happening. Afain we need to prepare the data before plotting. We will use the rounded coordinates to visualize the number of cases per are. Therefore, we need to compute the ratio of daytime and nighttime cases versus total cases for one area. This will be the base for our pie charts. Afterwards, we can also use the number of cases to control the size of the pie charts. This sounds like a lot, but we actually need only a few lines of code.
+The last attempt to plot the data was basically a map without any *spatial context*. We can add a background map and tweak titles, labs, and add pie charts to see where and during what time of day homicides are happening. Again we need to prepare the data before plotting. We will use the rounded coordinates to visualize the number of cases per area. Therefore, we need to compute the ratio of daytime and nighttime cases versus total cases for one area. This will be the base for our pie charts. Afterwards, we can also use the number of cases to control the size of the pie charts. This sounds like a lot, but we actually need only a few lines of code.
 
 ```r
 ## Prepare data for plotting of a map with pie charts
@@ -203,7 +202,7 @@ pie_prep <- dt %>%
     # Rename column
     mutate(`Total cases` = count_total)
 ```
-You might be wondering about the addition of the radius column. The **scatterpie** package is used to produce pie charts and if we would scale the size by the raw total number of cases the discrepancy between sizes would be to high. We need to transform this number in a way to down scale large values more drastically than small values. I went for a square root transformation, but double-squareroot- or log-transformation also works. The new value is the radius of the pie chart, and it will be converted to the original value by reversing the calculation (see below). This whole process is fiddly, but I did not find a better approach then trial and error. Let me know if I am overlooking something crucial!
+You might be wondering about the addition of the radius column. The **scatterpie** package is used to produce pie charts and if we would scale the size by the raw total number of cases the discrepancy between sizes would be to high. We need to transform this number in a way to down scale large values more heavily than small values. I went for a square root transformation, but double-squareroot- or log-transformation also works. The new value is the radius of the pie chart, and it will be converted to the original value by reversing the calculation (see below). This whole process is fiddly, but I did not find a better approach then trial and error. Let me know if I am overlooking something crucial!
 
 The data looks nice and is ready for plotting. But one thing is missing: we need a map in order to provide context for our data and analysis. We can use `get_map()` from **ggmap** to access open source tile sets. We can use names or a bounding box, which is a set of coordinates defining a rectangle and its position. Here, I used the latter, as it ensures the inclusion of all points. As we are going to build a map with **ggplot2** (or *ggmap* respectively), we also nee to convert our prepared data to a spatial object. Here we use the package **sf*** to yield a simple feature object, which we can plot on our map. 
 

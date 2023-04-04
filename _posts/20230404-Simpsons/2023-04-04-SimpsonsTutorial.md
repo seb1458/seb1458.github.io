@@ -165,7 +165,10 @@ ggplot(tbl, aes(x = season, y = ep_no, fill = ep_ratingCat)) +
     my_theme
 ```
 
-![Alt text](simpsonsRating.png)
+<figure>
+<img src="https://seb1458.github.io/assets/img/230404-Simpsons/simpsonsRating.png" style="display: block; margin: auto;" />
+<figcaption>Fig 1. Evolution of The Simpsons episodes ranking.</figcaption>
+</figure>
 
 An we are done! We scraped data from IMDB and plotted it in a cool way. We can save the plot using ```ggsave()``` or the GUI of RStudio.
 
